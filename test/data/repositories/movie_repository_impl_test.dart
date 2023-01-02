@@ -392,7 +392,7 @@ void main() {
       final tId = 1;
       when(mockLocalDataSource.getMovieById(tId)).thenAnswer((_) async => null);
       // act
-      final result = await repository.isAddedToWatchlist(tId);
+      final result = await repository.isAddedToWatchlistMovie(tId);
       // assert
       expect(result, false);
     });
