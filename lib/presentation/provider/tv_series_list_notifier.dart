@@ -48,9 +48,9 @@ class TvSeriesListNotifier extends ChangeNotifier {
         _message = failure.message;
         notifyListeners();
       },
-      (moviesData) {
+      (tvSeriesData) {
         _nowPlayingState = RequestState.Loaded;
-        _nowPlayingTvSeries = moviesData;
+        _nowPlayingTvSeries = tvSeriesData;
         notifyListeners();
       },
     );
@@ -67,9 +67,9 @@ class TvSeriesListNotifier extends ChangeNotifier {
         _message = failure.message;
         notifyListeners();
       },
-      (moviesData) {
+      (tvSeries) {
         _popularTvSeriesState = RequestState.Loaded;
-        _popularTvSeries = moviesData;
+        _popularTvSeries = tvSeries;
         notifyListeners();
       },
     );
@@ -86,9 +86,9 @@ class TvSeriesListNotifier extends ChangeNotifier {
         _message = failure.message;
         notifyListeners();
       },
-      (moviesData) {
+      (tvSeriesData) {
         _topRatedTvSeriesState = RequestState.Loaded;
-        _topRatedTvSeries = moviesData;
+        _topRatedTvSeries = tvSeriesData;
         notifyListeners();
       },
     );
