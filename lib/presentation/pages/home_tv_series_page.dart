@@ -1,5 +1,6 @@
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
+import 'package:ditonton/presentation/pages/home_movie_page.dart';
 import 'package:ditonton/presentation/pages/popular_tv_series_page.dart';
 import 'package:ditonton/presentation/pages/search_page.dart';
 import 'package:ditonton/presentation/pages/top_rated_tv_series_page.dart';
@@ -46,7 +47,7 @@ class _HomeTvSeriesPageState extends State<HomeTvSeriesPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomeTvSeriesPage(),
+                      builder: (context) => HomeMoviePage(),
                     ));
               },
             ),
@@ -75,7 +76,7 @@ class _HomeTvSeriesPageState extends State<HomeTvSeriesPage> {
         ),
       ),
       appBar: AppBar(
-        title: Text('Ditonton'),
+        title: Text('TV Series'),
         actions: [
           IconButton(
             onPressed: () {
