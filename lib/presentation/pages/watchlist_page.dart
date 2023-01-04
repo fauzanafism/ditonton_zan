@@ -1,6 +1,8 @@
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/common/utils.dart';
+import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
+import 'package:ditonton/presentation/pages/watchlist_tv_series_page.dart';
 import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:ditonton/presentation/provider/watchlist_tv_series_notifier.dart';
 import 'package:ditonton/presentation/widgets/movie_list.dart';
@@ -47,8 +49,8 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
             children: [
               _buildSubHeading(
                 title: 'Movies',
-                onTap: () =>
-                    Navigator.pushNamed(context, WatchlistPage.ROUTE_NAME),
+                onTap: () => Navigator.pushNamed(
+                    context, WatchlistMoviesPage.ROUTE_NAME),
               ),
               Consumer<WatchlistMovieNotifier>(builder: (context, data, child) {
                 final state = data.watchlistState;
@@ -63,10 +65,10 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
                 }
               }),
               _buildSubHeading(
-                  title: 'TV Series',
-                  // onTap: () =>
-                  //     Navigator.pushNamed(context, TopRatedMoviesPage.ROUTE_NAME),
-                  onTap: () {}),
+                title: 'TV Series',
+                onTap: () => Navigator.pushNamed(
+                    context, WatchlistTvSeriesPage.ROUTE_NAME),
+              ),
               Consumer<WatchlistTvSeriesNotifier>(
                   builder: (context, data, child) {
                 final state = data.watchlistState;
