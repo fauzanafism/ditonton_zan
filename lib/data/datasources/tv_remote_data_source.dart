@@ -8,9 +8,9 @@ import 'package:ditonton/data/models/tv_series_response.dart';
 import 'package:http/http.dart' as http;
 
 abstract class TvSeriesRemoteDataSource {
-  Future<List<TvSeriesModel>> getAiringTodayTvSeriess();
-  Future<List<TvSeriesModel>> getPopularTvSeriess();
-  Future<List<TvSeriesModel>> getTopRatedTvSeriess();
+  Future<List<TvSeriesModel>> getAiringTodayTvSeries();
+  Future<List<TvSeriesModel>> getPopularTvSeries();
+  Future<List<TvSeriesModel>> getTopRatedTvSeries();
   Future<TvSeriesDetailResponse> getTvSeriesDetail(int id);
   Future<List<EpisodeModel>> getTvSeriesSeasonEpisodes(
       int id, int seasonNumber);
@@ -27,7 +27,7 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
   TvSeriesRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<TvSeriesModel>> getAiringTodayTvSeriess() async {
+  Future<List<TvSeriesModel>> getAiringTodayTvSeries() async {
     final response =
         await client.get(Uri.parse('$BASE_URL/tv/airing_today?$API_KEY'));
 
@@ -41,7 +41,6 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
   @override
   Future<TvSeriesDetailResponse> getTvSeriesDetail(int id) async {
     final response = await client.get(Uri.parse('$BASE_URL/tv/$id?$API_KEY'));
-
     if (response.statusCode == 200) {
       return TvSeriesDetailResponse.fromJson(json.decode(response.body));
     } else {
@@ -75,7 +74,7 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
   }
 
   @override
-  Future<List<TvSeriesModel>> getPopularTvSeriess() async {
+  Future<List<TvSeriesModel>> getPopularTvSeries() async {
     final response =
         await client.get(Uri.parse('$BASE_URL/tv/popular?$API_KEY'));
 
@@ -87,7 +86,7 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
   }
 
   @override
-  Future<List<TvSeriesModel>> getTopRatedTvSeriess() async {
+  Future<List<TvSeriesModel>> getTopRatedTvSeries() async {
     final response =
         await client.get(Uri.parse('$BASE_URL/tv/top_rated?$API_KEY'));
 
