@@ -23,11 +23,13 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   @override
   Future<Either<Failure, List<TvSeries>>> getAiringTodayTvSeries() async {
     try {
-      final result = await remoteDataSource.getAiringTodayTvSeriess();
+      final result = await remoteDataSource.getAiringTodayTvSeries();
 
       return Right(result.map((model) => model.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
     } on TlsException catch (e) {
       return Left(CommonFailure('Certificated Not Valid:\n${e.message}'));
     }
@@ -81,11 +83,13 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   @override
   Future<Either<Failure, List<TvSeries>>> getPopularTvSeries() async {
     try {
-      final result = await remoteDataSource.getPopularTvSeriess();
+      final result = await remoteDataSource.getPopularTvSeries();
 
       return Right(result.map((model) => model.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
     } on TlsException catch (e) {
       return Left(CommonFailure('Certificated Not Valid:\n${e.message}'));
     }
@@ -94,11 +98,13 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   @override
   Future<Either<Failure, List<TvSeries>>> getTopRatedTvSeries() async {
     try {
-      final result = await remoteDataSource.getTopRatedTvSeriess();
+      final result = await remoteDataSource.getTopRatedTvSeries();
 
       return Right(result.map((model) => model.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
     } on TlsException catch (e) {
       return Left(CommonFailure('Certificated Not Valid:\n${e.message}'));
     }
