@@ -1,6 +1,7 @@
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/utils.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
+import 'package:ditonton/presentation/pages/airing_today_page.dart';
 import 'package:ditonton/presentation/pages/movie_detail_page.dart';
 import 'package:ditonton/presentation/pages/home_movie_page.dart';
 import 'package:ditonton/presentation/pages/popular_movies_page.dart';
@@ -12,6 +13,7 @@ import 'package:ditonton/presentation/pages/tv_series_detail_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_tv_series_page.dart';
+import 'package:ditonton/presentation/provider/airing_today_notifier.dart';
 import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
 import 'package:ditonton/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
@@ -76,6 +78,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => di.locator<WatchlistTvSeriesNotifier>(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<AiringTodayNotifier>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -101,6 +106,8 @@ class MyApp extends StatelessWidget {
                 builder: (_) => MovieDetailPage(id: id),
                 settings: settings,
               );
+            case AiringTodayPage.ROUTE_NAME:
+              return CupertinoPageRoute(builder: (_) => AiringTodayPage());
             case PopularTvSeriesPage.ROUTE_NAME:
               return CupertinoPageRoute(builder: (_) => PopularTvSeriesPage());
             case TopRatedTvSeriesPage.ROUTE_NAME:
