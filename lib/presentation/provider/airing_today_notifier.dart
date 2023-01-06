@@ -1,7 +1,6 @@
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/domain/entities/tv_series.dart';
 import 'package:ditonton/domain/usecases/get_airing_today_tv_series.dart';
-import 'package:ditonton/domain/usecases/get_popular_tv_series.dart';
 
 import 'package:flutter/foundation.dart';
 
