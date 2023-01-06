@@ -48,47 +48,50 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
       appBar: AppBar(
         title: Text('Watchlist'),
       ),
-      body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              _buildSubHeading(
-                title: 'Movies',
-                onTap: () => Navigator.pushNamed(
-                    context, WatchlistMoviesPage.ROUTE_NAME),
-              ),
-              Consumer<WatchlistMovieNotifier>(builder: (context, data, child) {
-                final state = data.watchlistState;
-                if (state == RequestState.Loading) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state == RequestState.Loaded) {
-                  return MovieList(data.watchlistMovies);
-                } else {
-                  return Text('Failed');
-                }
-              }),
-              _buildSubHeading(
-                title: 'TV Series',
-                onTap: () => Navigator.pushNamed(
-                    context, WatchlistTvSeriesPage.ROUTE_NAME),
-              ),
-              Consumer<WatchlistTvSeriesNotifier>(
-                  builder: (context, data, child) {
-                final state = data.watchlistState;
-                if (state == RequestState.Loading) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state == RequestState.Loaded) {
-                  return TvSeriesList(data.watchlistTvSeries);
-                } else {
-                  return Text('Failed');
-                }
-              }),
-            ],
-          )),
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                _buildSubHeading(
+                  title: 'Movies',
+                  onTap: () => Navigator.pushNamed(
+                      context, WatchlistMoviesPage.ROUTE_NAME),
+                ),
+                Consumer<WatchlistMovieNotifier>(
+                    builder: (context, data, child) {
+                  final state = data.watchlistState;
+                  if (state == RequestState.Loading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state == RequestState.Loaded) {
+                    return MovieList(data.watchlistMovies);
+                  } else {
+                    return Text('Failed');
+                  }
+                }),
+                _buildSubHeading(
+                  title: 'TV Series',
+                  onTap: () => Navigator.pushNamed(
+                      context, WatchlistTvSeriesPage.ROUTE_NAME),
+                ),
+                Consumer<WatchlistTvSeriesNotifier>(
+                    builder: (context, data, child) {
+                  final state = data.watchlistState;
+                  if (state == RequestState.Loading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state == RequestState.Loaded) {
+                    return TvSeriesList(data.watchlistTvSeries);
+                  } else {
+                    return Text('Failed');
+                  }
+                }),
+              ],
+            )),
+      ),
     );
   }
 
