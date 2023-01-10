@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Episode extends Equatable {
-  const Episode({
+  Episode({
     required this.airDate,
     required this.episodeNumber,
     required this.id,
