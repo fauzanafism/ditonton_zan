@@ -1,5 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
+import 'package:ditonton/common/failure.dart';
+import 'package:ditonton/domain/entities/movie.dart';
+import 'package:ditonton/domain/usecases/get_now_playing_movies.dart';
+import 'package:ditonton/presentation/bloc/now_playing_bloc.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -8,12 +12,12 @@ class MockGetNowPlayingMovies extends Mock implements GetNowPlayingMovies {}
 
 void main() {
   late MockGetNowPlayingMovies mockGetNowPlayingMovies;
-  late NowPlayingMovieBloc nowPlayingMovieBloc;
+  late NowPlayingBloc nowPlayingMovieBloc;
 
   setUp(() {
     mockGetNowPlayingMovies = MockGetNowPlayingMovies();
     nowPlayingMovieBloc =
-        NowPlayingMovieBloc(getNowPlayingMovies: mockGetNowPlayingMovies);
+        NowPlayingBloc(getNowPlayingMovies: mockGetNowPlayingMovies);
   });
 
   final tMovie = Movie(
@@ -35,35 +39,35 @@ void main() {
 
   group('Movie Bloc, Now Playing Movie:', () {
     test('initialState should be Empty', () {
-      expect(nowPlayingMovieBloc.state, NowPlayingMovieEmptyState());
+      expect(nowPlayingMovieBloc.state, NowPlayingEmptyState());
     });
 
-    blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
+    blocTest<NowPlayingBloc, NowPlayingState>(
       'should emit[Loading, HasData] when data is gotten successfully',
       build: () {
         when(() => mockGetNowPlayingMovies.execute())
             .thenAnswer((_) async => Right(tMovieList));
         return nowPlayingMovieBloc;
       },
-      act: (bloc) => bloc.add(FetchNowNowPlayingMovies()),
+      act: (bloc) => bloc.add(FetchNowPlayingMovie()),
       expect: () => [
-        NowPlayingMovieLoadingState(),
-        NowPlayingMovieHasDataState(result: tMovieList)
+        NowPlayingLoadingState(),
+        NowPlayingHasDataState(result: tMovieList)
       ],
       verify: (bloc) => verify(() => mockGetNowPlayingMovies.execute()),
     );
 
-    blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
+    blocTest<NowPlayingBloc, NowPlayingState>(
       'should emit [Loading, Error] when get data is unsuccessful',
       build: () {
-        when(() => mockGetNowPlayingMovies.execute()).thenAnswer(
-            (_) async => const Left(ServerFailure('Server Failure')));
+        when(() => mockGetNowPlayingMovies.execute())
+            .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
         return nowPlayingMovieBloc;
       },
-      act: (bloc) => bloc.add(FetchNowNowPlayingMovies()),
+      act: (bloc) => bloc.add(FetchNowPlayingMovie()),
       expect: () => [
-        NowPlayingMovieLoadingState(),
-        const NowPlayingMovieErrorState(message: 'Server Failure'),
+        NowPlayingLoadingState(),
+        NowPlayingErrorState(message: 'Server Failure'),
       ],
       verify: (bloc) => verify(() => mockGetNowPlayingMovies.execute()),
     );
