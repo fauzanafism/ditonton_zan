@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:core/core.dart';
 import 'package:dartz/dartz.dart';
-import 'package:feature_movie/domain/entities/movie.dart';
-import 'package:feature_movie/domain/usecases/get_movie_recommendations.dart';
-import 'package:feature_movie/presentation/blocs/recommendation_movie_bloc.dart';
+import 'package:ditonton/common/failure.dart';
+import 'package:ditonton/domain/entities/movie.dart';
+import 'package:ditonton/domain/usecases/get_movie_recommendations.dart';
+import 'package:ditonton/presentation/bloc/movie_recommendation_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -12,11 +12,11 @@ class MockGetMovieRecommendations extends Mock
 
 void main() {
   late MockGetMovieRecommendations mockGetMovieRecommendations;
-  late RecommendationMovieBloc recommendationMovieBloc;
+  late MovieRecommendationBloc movieRecommendationBloc;
 
   setUp(() {
     mockGetMovieRecommendations = MockGetMovieRecommendations();
-    recommendationMovieBloc = RecommendationMovieBloc(
+    movieRecommendationBloc = MovieRecommendationBloc(
         getMovieRecommendations: mockGetMovieRecommendations);
   });
 
@@ -40,35 +40,35 @@ void main() {
 
   group('Movie Bloc, Recommendation Movie', () {
     test('initialState should be Empty', () {
-      expect(recommendationMovieBloc.state, RecommendationMovieEmptyState());
+      expect(movieRecommendationBloc.state, MovieRecommendationEmptyState());
     });
 
-    blocTest<RecommendationMovieBloc, RecommendationMovieState>(
-      'Should emit[Loading, HasData] when data is gotten successfully',
+    blocTest<MovieRecommendationBloc, MovieRecommendationState>(
+      'Should emit[Loading, HasData] when data success',
       build: () {
         when(() => mockGetMovieRecommendations.execute(tId))
             .thenAnswer((_) async => Right(tMovies));
-        return recommendationMovieBloc;
+        return movieRecommendationBloc;
       },
-      act: (bloc) => bloc.add(const FetchNowRecommendationMovie(id: tId)),
+      act: (bloc) => bloc.add(FetchRecommendationMovie(id: tId)),
       expect: () => [
-        RecommendationMovieLoadingState(),
-        RecommendationMovieHasDataState(result: tMovies)
+        MovieRecommendationLoadingState(),
+        MovieRecommendationHasDataState(result: tMovies)
       ],
       verify: (bloc) => verify(() => mockGetMovieRecommendations.execute(tId)),
     );
 
-    blocTest<RecommendationMovieBloc, RecommendationMovieState>(
+    blocTest<MovieRecommendationBloc, MovieRecommendationState>(
       'Should emit [Loading, Error] when get data is unsuccessful',
       build: () {
-        when(() => mockGetMovieRecommendations.execute(tId)).thenAnswer(
-            (_) async => const Left(ServerFailure('Server Failure')));
-        return recommendationMovieBloc;
+        when(() => mockGetMovieRecommendations.execute(tId))
+            .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        return movieRecommendationBloc;
       },
-      act: (bloc) => bloc.add(const FetchNowRecommendationMovie(id: tId)),
+      act: (bloc) => bloc.add(FetchRecommendationMovie(id: tId)),
       expect: () => [
-        RecommendationMovieLoadingState(),
-        const RecommendationMovieErrorState(message: 'Server Failure'),
+        MovieRecommendationLoadingState(),
+        MovieRecommendationErrorState(message: 'Server Failure'),
       ],
       verify: (bloc) => verify(() => mockGetMovieRecommendations.execute(tId)),
     );
