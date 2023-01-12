@@ -1,27 +1,27 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:core/core.dart';
 import 'package:dartz/dartz.dart';
-import 'package:feature_movie/domain/entities/movie.dart';
-import 'package:feature_movie/domain/usecases/search_movies.dart';
-import 'package:feature_movie/presentation/blocs/search_movie_bloc.dart';
+import 'package:ditonton/common/failure.dart';
+import 'package:ditonton/domain/entities/movie.dart';
+import 'package:ditonton/domain/usecases/search_movies.dart';
+import 'package:ditonton/presentation/bloc/movie_search_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockSearchMovies extends Mock implements SearchMovies {}
 
 void main() {
-  late SearchMovieBloc searchBloc;
+  late MovieSearchBloc searchBloc;
   late MockSearchMovies mockSearchMovies;
 
   setUp(() {
     mockSearchMovies = MockSearchMovies();
-    searchBloc = SearchMovieBloc(searchMovies: mockSearchMovies);
+    searchBloc = MovieSearchBloc(searchMovies: mockSearchMovies);
   });
 
   final tMovieModel = Movie(
     adult: false,
     backdropPath: '/muth4OYamXf41G2evdrLEg8d3om.jpg',
-    genreIds: const [14, 28],
+    genreIds: [14, 28],
     id: 557,
     originalTitle: 'Spider-Man',
     overview:
@@ -39,39 +39,39 @@ void main() {
 
   group('Movie Bloc, Search Movie:', () {
     test('initial state should be empty', () {
-      expect(searchBloc.state, SearchMovieEmptyState());
+      expect(searchBloc.state, MovieSearchEmptyState());
     });
 
-    blocTest<SearchMovieBloc, SearchMovieState>(
-      'should emit [Loading, HasData] when data is gotten successfully',
+    blocTest<MovieSearchBloc, MovieSearchState>(
+      'should emit [Loading, HasData] when data success',
       build: () {
         when(() => mockSearchMovies.execute(tQuery))
             .thenAnswer((_) async => Right(tMovieList));
         return searchBloc;
       },
-      act: (bloc) => bloc.add(const OnQueryChanged(query: tQuery)),
+      act: (bloc) => bloc.add(OnQueryChanged(query: tQuery)),
       wait: const Duration(milliseconds: 500),
       expect: () => [
-        SearchMovieLoadingState(),
-        SearchMovieHasDataState(result: tMovieList),
+        MovieSearchLoadingState(),
+        MovieSearchHasDataState(result: tMovieList),
       ],
       verify: (bloc) {
         verify(() => mockSearchMovies.execute(tQuery));
       },
     );
 
-    blocTest<SearchMovieBloc, SearchMovieState>(
+    blocTest<MovieSearchBloc, MovieSearchState>(
       'should emit [Loading, Error] when get search is unsuccessful',
       build: () {
         when(() => mockSearchMovies.execute(tQuery))
-            .thenAnswer((_) async => const Left(ServerFailure('Server Failure')));
+            .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
         return searchBloc;
       },
-      act: (bloc) => bloc.add(const OnQueryChanged(query: tQuery)),
+      act: (bloc) => bloc.add(OnQueryChanged(query: tQuery)),
       wait: const Duration(milliseconds: 500),
       expect: () => [
-        SearchMovieLoadingState(),
-        const SearchMovieErrorState(message: 'Server Failure'),
+        MovieSearchLoadingState(),
+        MovieSearchErrorState(message: 'Server Failure'),
       ],
       verify: (bloc) {
         verify(() => mockSearchMovies.execute(tQuery));
@@ -79,4 +79,3 @@ void main() {
     );
   });
 }
-Footer
