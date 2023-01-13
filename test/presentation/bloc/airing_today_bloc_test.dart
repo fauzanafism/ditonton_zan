@@ -1,74 +1,72 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:core/core.dart';
 import 'package:dartz/dartz.dart';
-import 'package:feature_tv/domain/entities/tv.dart';
-import 'package:feature_tv/domain/usecases/get_on_the_air_tv_shows.dart';
-import 'package:feature_tv/presentation/blocs/on_the_air_tv/on_the_air_tv_bloc.dart';
+import 'package:ditonton/common/failure.dart';
+import 'package:ditonton/domain/entities/tv_series.dart';
+import 'package:ditonton/domain/usecases/get_airing_today_tv_series.dart';
+import 'package:ditonton/presentation/bloc/airing_today_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGetOnTheAirTVShows extends Mock implements GetOnTheAirTVShows {}
+class MockAiringToday extends Mock implements GetAiringTodayTvSeries {}
 
 void main() {
-  late MockGetOnTheAirTVShows mockGetOnTheAirTVShows;
-  late OnTheAirTvBloc onTheAirTVBloc;
+  late MockAiringToday mockAiringToday;
+  late AiringTodayBloc airingTodayBloc;
 
   setUp(() {
-    mockGetOnTheAirTVShows = MockGetOnTheAirTVShows();
-    onTheAirTVBloc = OnTheAirTvBloc(getOnTheAirTVShows: mockGetOnTheAirTVShows);
+    mockAiringToday = MockAiringToday();
+    airingTodayBloc = AiringTodayBloc(getAiringTodayTvSeries: mockAiringToday);
   });
 
-  final tTVShow = TV(
-    backdropPath: 'backdropPath',
-    firstAirDate: DateTime.parse("2021-05-23"),
-    genreIds: const [1, 2, 3],
-    id: 1,
-    name: 'name',
-    originCountry: const ['en'],
-    originalLanguage: 'originalLanguage',
-    originalName: 'originalName',
-    overview: 'overview',
-    popularity: 1.0,
-    posterPath: 'posterPath',
-    voteAverage: 1.0,
-    voteCount: 1,
-  );
+  final tTvSeries = TvSeries(
+      backdropPath: '/tE6dWq9neq2IPSc6kJQdxyMrl7w.jpg',
+      firstAirDate: '2022-08-15',
+      genreIds: [10759, 10765, 18],
+      id: 121750,
+      name: 'Darna',
+      originalName: 'Darna',
+      overview:
+          "When fragments of a green crystal scatter in the city and turn people into destructive monsters, Narda embraces her destiny as Darna—the mighty protector of the powerful stone from Planet Marte.",
+      popularity: 909.96,
+      posterPath: "/CFOce6pbb3FRNaBaVdvNsCv5kR.jpg",
+      voteAverage: 4.8,
+      voteCount: 12);
 
-  final tTVShowsList = <TV>[tTVShow];
+  final tTVShowsList = <TvSeries>[tTvSeries];
 
   group('TV Bloc, On The Air TV Shows:', () {
     test('initialState should be Empty', () {
-      expect(onTheAirTVBloc.state, OnTheAirTvInitialState());
+      expect(airingTodayBloc.state, AiringTodayEmptyState());
     });
 
-    blocTest<OnTheAirTvBloc, OnTheAirTvState>(
+    blocTest<AiringTodayBloc, AiringTodayState>(
       'should emit[Loading, HasData] when data is gotten successfully',
       build: () {
-        when(() => mockGetOnTheAirTVShows.execute())
+        when(() => mockAiringToday.execute())
             .thenAnswer((_) async => Right(tTVShowsList));
-        return onTheAirTVBloc;
+        return airingTodayBloc;
       },
-      act: (bloc) => bloc.add(FetchOnTheAirTvShows()),
+      act: (bloc) => bloc.add(FetchAiringToday()),
       expect: () => [
-        OnTheAirTvLoadingState(),
-        OnTheAirTvHasDataState(result: tTVShowsList)
+        AiringTodayLoadingState(),
+        AiringTodayHasDataState(result: tTVShowsList)
       ],
-      verify: (bloc) => verify(() => mockGetOnTheAirTVShows.execute()),
+      verify: (bloc) => verify(() => mockAiringToday.execute()),
     );
 
-    blocTest<OnTheAirTvBloc, OnTheAirTvState>(
+    blocTest<AiringTodayBloc, AiringTodayState>(
       'should emit [Loading, Error] when get data is unsuccessful',
       build: () {
-        when(() => mockGetOnTheAirTVShows.execute()).thenAnswer(
-            (_) async => const Left(ServerFailure('Server Failure')));
-        return onTheAirTVBloc;
+        when(() => mockAiringToday.execute())
+            .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        return airingTodayBloc;
       },
-      act: (bloc) => bloc.add(FetchOnTheAirTvShows()),
+      act: (bloc) => bloc.add(FetchAiringToday()),
       expect: () => [
-        OnTheAirTvLoadingState(),
-        const OnTheAirTvErrorState(message: 'Server Failure'),
+        AiringTodayLoadingState(),
+        AiringTodayErrorState(message: 'Server Failure'),
       ],
-      verify: (bloc) => verify(() => mockGetOnTheAirTVShows.execute()),
+      verify: (bloc) => verify(() => mockAiringToday.execute()),
     );
   });
 }
