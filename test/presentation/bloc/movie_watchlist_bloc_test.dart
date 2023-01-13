@@ -1,56 +1,56 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:core/core.dart';
 import 'package:dartz/dartz.dart';
-import 'package:feature_movie/domain/usecases/get_watchlist_movies.dart';
-import 'package:feature_movie/presentation/blocs/watchlist_movie_bloc.dart';
+import 'package:ditonton/common/failure.dart';
+import 'package:ditonton/domain/usecases/get_watchlist_movies.dart';
+import 'package:ditonton/presentation/bloc/movie_watchlist_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../helper/dummy_data/dummy_objects.dart';
+import '../../dummy_data/dummy_objects.dart';
 
 class MockGetWatchlistMovies extends Mock implements GetWatchlistMovies {}
 
 void main() {
   late MockGetWatchlistMovies mockGetWatchlistMovies;
-  late WatchlistMovieBloc watchlistMovieBloc;
+  late MovieWatchlistBloc movieWatchlistBloc;
 
   setUp(() {
     mockGetWatchlistMovies = MockGetWatchlistMovies();
-    watchlistMovieBloc =
-        WatchlistMovieBloc(getWatchlistMovies: mockGetWatchlistMovies);
+    movieWatchlistBloc =
+        MovieWatchlistBloc(getWatchlistMovies: mockGetWatchlistMovies);
   });
 
   group('Movie Bloc, Watchlist Movie:', () {
     test('initialState should be Empty', () {
-      expect(watchlistMovieBloc.state, WatchlistMovieEmptyState());
+      expect(movieWatchlistBloc.state, MovieWatchlistEmptyState());
     });
 
-    blocTest<WatchlistMovieBloc, WatchlistMovieState>(
+    blocTest<MovieWatchlistBloc, MovieWatchlistState>(
       'should emit[Loading, HasData] when data is gotten successfully',
       build: () {
         when(() => mockGetWatchlistMovies.execute())
             .thenAnswer((_) async => Right([testWatchlistMovie]));
-        return watchlistMovieBloc;
+        return movieWatchlistBloc;
       },
-      act: (bloc) => bloc.add(FetchNowWatchlistMovie()),
+      act: (bloc) => bloc.add(FetchWatchlistMovie()),
       expect: () => [
-        WatchlistMovieLoadingState(),
-        WatchlistMovieHasDataState(result: [testWatchlistMovie])
+        MovieWatchlistLoadingState(),
+        MovieWatchlistHasDataState(result: [testWatchlistMovie])
       ],
       verify: (bloc) => verify(() => mockGetWatchlistMovies.execute()),
     );
 
-    blocTest<WatchlistMovieBloc, WatchlistMovieState>(
+    blocTest<MovieWatchlistBloc, MovieWatchlistState>(
       'should emit [Loading, Error] when get data is unsuccessful',
       build: () {
         when(() => mockGetWatchlistMovies.execute()).thenAnswer(
-            (_) async => const Left(DatabaseFailure("Can't get data")));
-        return watchlistMovieBloc;
+            (_) async => Left(DatabaseFailure("Can't get data")));
+        return movieWatchlistBloc;
       },
-      act: (bloc) => bloc.add(FetchNowWatchlistMovie()),
+      act: (bloc) => bloc.add(FetchWatchlistMovie()),
       expect: () => [
-        WatchlistMovieLoadingState(),
-        const WatchlistMovieErrorState(message: "Can't get data"),
+        MovieWatchlistLoadingState(),
+        MovieWatchlistErrorState(message: "Can't get data"),
       ],
       verify: (bloc) => verify(() => mockGetWatchlistMovies.execute()),
     );
