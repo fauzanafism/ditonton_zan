@@ -34,39 +34,42 @@ void main() {
 
   final tTVShowsList = <TvSeries>[tTvSeries];
 
-  group('TV Bloc, On The Air TV Shows:', () {
-    test('initialState should be Empty', () {
-      expect(airingTodayBloc.state, AiringTodayEmptyState());
-    });
+  group(
+    'TV Bloc, On The Air TV Shows:',
+    () {
+      test('initialState should be Empty', () {
+        expect(airingTodayBloc.state, AiringTodayEmptyState());
+      });
 
-    blocTest<AiringTodayBloc, AiringTodayState>(
-      'should emit[Loading, HasData] when data is gotten successfully',
-      build: () {
-        when(() => mockAiringToday.execute())
-            .thenAnswer((_) async => Right(tTVShowsList));
-        return airingTodayBloc;
-      },
-      act: (bloc) => bloc.add(FetchAiringToday()),
-      expect: () => [
-        AiringTodayLoadingState(),
-        AiringTodayHasDataState(result: tTVShowsList)
-      ],
-      verify: (bloc) => verify(() => mockAiringToday.execute()),
-    );
+      blocTest<AiringTodayBloc, AiringTodayState>(
+        'should emit[Loading, HasData] when data is gotten successfully',
+        build: () {
+          when(() => mockAiringToday.execute())
+              .thenAnswer((_) async => Right(tTVShowsList));
+          return airingTodayBloc;
+        },
+        act: (bloc) => bloc.add(FetchAiringToday()),
+        expect: () => [
+          AiringTodayLoadingState(),
+          AiringTodayHasDataState(result: tTVShowsList)
+        ],
+        verify: (bloc) => verify(() => mockAiringToday.execute()),
+      );
 
-    blocTest<AiringTodayBloc, AiringTodayState>(
-      'should emit [Loading, Error] when get data is unsuccessful',
-      build: () {
-        when(() => mockAiringToday.execute())
-            .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
-        return airingTodayBloc;
-      },
-      act: (bloc) => bloc.add(FetchAiringToday()),
-      expect: () => [
-        AiringTodayLoadingState(),
-        AiringTodayErrorState(message: 'Server Failure'),
-      ],
-      verify: (bloc) => verify(() => mockAiringToday.execute()),
-    );
-  });
+      blocTest<AiringTodayBloc, AiringTodayState>(
+        'should emit [Loading, Error] when get data is unsuccessful',
+        build: () {
+          when(() => mockAiringToday.execute())
+              .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+          return airingTodayBloc;
+        },
+        act: (bloc) => bloc.add(FetchAiringToday()),
+        expect: () => [
+          AiringTodayLoadingState(),
+          AiringTodayErrorState(message: 'Server Failure'),
+        ],
+        verify: (bloc) => verify(() => mockAiringToday.execute()),
+      );
+    },
+  );
 }
