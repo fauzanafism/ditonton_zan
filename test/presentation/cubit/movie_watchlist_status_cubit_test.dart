@@ -1,148 +1,118 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Codespaces
-Marketplace
-Explore
- 
-@fauzanafism 
-radensaleh
-/
-Ditonton-App
-Public
-Fork your own copy of radensaleh/Ditonton-App
-Code
-Issues
-Pull requests
-Actions
-Projects
-Security
-Insights
-Ditonton-App/modules/feature_movie/test/presentation/blocs/movie_watchlist_status_cubit_test.dart
-@radensaleh
-radensaleh initial commit
-Latest commit ab1a10a on Nov 29, 2022
- History
- 1 contributor
-120 lines (108 sloc)  4.51 KB
-
 import 'package:bloc_test/bloc_test.dart';
-import 'package:core/core.dart';
 import 'package:dartz/dartz.dart';
-import 'package:feature_movie/domain/usecases/get_watchlist_status.dart';
-import 'package:feature_movie/domain/usecases/remove_watchlist.dart';
-import 'package:feature_movie/domain/usecases/save_watchlist.dart';
-import 'package:feature_movie/presentation/blocs/watchlist_status_movie_cubit.dart';
+import 'package:ditonton/common/failure.dart';
+import 'package:ditonton/domain/usecases/get_watchlist_movie_status.dart';
+import 'package:ditonton/domain/usecases/remove_watchlist_movie.dart';
+import 'package:ditonton/domain/usecases/save_watchlist_movie.dart';
+import 'package:ditonton/presentation/cubit/movie_watchlist_status_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../helper/dummy_data/dummy_objects.dart';
+import '../../dummy_data/dummy_objects.dart';
 
-class MockGetWatchListStatus extends Mock implements GetWatchListStatus {}
+class MockGetWatchListStatus extends Mock implements GetWatchListMovieStatus {}
 
-class MockSaveWatchlist extends Mock implements SaveWatchlist {}
+class MockSaveWatchlist extends Mock implements SaveWatchlistMovie {}
 
-class MockRemoveWatchlist extends Mock implements RemoveWatchlist {}
+class MockRemoveWatchlist extends Mock implements RemoveWatchlistMovie {}
 
 void main() {
   late MockGetWatchListStatus mockGetWatchListStatus;
   late MockSaveWatchlist mockSaveWatchlist;
   late MockRemoveWatchlist mockRemoveWatchlist;
-  late WatchlistStatusMovieCubit watchlistStatusMovieCubit;
+  late MovieWatchlistStatusCubit movieWatchlistStatusCubit;
 
   setUp(() {
     mockGetWatchListStatus = MockGetWatchListStatus();
     mockSaveWatchlist = MockSaveWatchlist();
     mockRemoveWatchlist = MockRemoveWatchlist();
-    watchlistStatusMovieCubit = WatchlistStatusMovieCubit(
-      getWatchListStatus: mockGetWatchListStatus,
-      saveWatchlist: mockSaveWatchlist,
-      removeWatchlist: mockRemoveWatchlist,
+    movieWatchlistStatusCubit = MovieWatchlistStatusCubit(
+      getWatchListMovieStatus: mockGetWatchListStatus,
+      saveWatchlistMovie: mockSaveWatchlist,
+      removeWatchlistMovie: mockRemoveWatchlist,
     );
   });
 
   const tId = 1;
 
   group('Movie Bloc, Watchlist Status Movie:', () {
-    blocTest<WatchlistStatusMovieCubit, WatchlistStatusMovieState>(
+    blocTest<MovieWatchlistStatusCubit, MovieWatchlistStatusState>(
       'should get watchlist true',
       build: () {
         when(() => mockGetWatchListStatus.execute(tId))
             .thenAnswer((_) async => true);
-        return watchlistStatusMovieCubit;
+        return movieWatchlistStatusCubit;
       },
       act: (bloc) => bloc.loadWatchlistStatus(tId),
       expect: () => [
-        const WatchlistStatusMovieState(isAddedWatchlist: true, message: ''),
+        const MovieWatchlistStatusState(isAddedWatchlist: true, message: ''),
       ],
     );
   });
 
   group('Movie Bloc, Save Watchlist Movie:', () {
-    blocTest<WatchlistStatusMovieCubit, WatchlistStatusMovieState>(
+    blocTest<MovieWatchlistStatusCubit, MovieWatchlistStatusState>(
       'should execute save watchlist when function called',
       build: () {
         when(() => mockSaveWatchlist.execute(testMovieDetail))
-            .thenAnswer((_) async => const Right('Added to Watchlist'));
+            .thenAnswer((_) async => Right('Added to Watchlist'));
         when(() => mockGetWatchListStatus.execute(testMovieDetail.id))
             .thenAnswer((_) async => true);
-        return watchlistStatusMovieCubit;
+        return movieWatchlistStatusCubit;
       },
       act: (bloc) => bloc.addWatchlistMovie(testMovieDetail),
       expect: () => [
-        const WatchlistStatusMovieState(
+        const MovieWatchlistStatusState(
             isAddedWatchlist: true, message: 'Added to Watchlist'),
       ],
     );
 
-    blocTest<WatchlistStatusMovieCubit, WatchlistStatusMovieState>(
+    blocTest<MovieWatchlistStatusCubit, MovieWatchlistStatusState>(
       'should update watchlist message when add watchlist failed',
       build: () {
         when(() => mockSaveWatchlist.execute(testMovieDetail))
-            .thenAnswer((_) async => const Left(DatabaseFailure('Failed')));
+            .thenAnswer((_) async => Left(DatabaseFailure('Failed')));
         when(() => mockGetWatchListStatus.execute(testMovieDetail.id))
             .thenAnswer((_) async => false);
-        return watchlistStatusMovieCubit;
+        return movieWatchlistStatusCubit;
       },
       act: (bloc) => bloc.addWatchlistMovie(testMovieDetail),
       expect: () => [
-        const WatchlistStatusMovieState(
+        const MovieWatchlistStatusState(
             isAddedWatchlist: false, message: 'Failed'),
       ],
     );
   });
 
   group('Movie Bloc, Remove Watchlist Movie:', () {
-    blocTest<WatchlistStatusMovieCubit, WatchlistStatusMovieState>(
+    blocTest<MovieWatchlistStatusCubit, MovieWatchlistStatusState>(
       'should execute remove watchlist when function called',
       build: () {
         when(() => mockRemoveWatchlist.execute(testMovieDetail))
             .thenAnswer((_) async => const Right('Removed'));
         when(() => mockGetWatchListStatus.execute(testMovieDetail.id))
             .thenAnswer((_) async => true);
-        return watchlistStatusMovieCubit;
+        return movieWatchlistStatusCubit;
       },
       act: (bloc) => bloc.removeFromWatchlistMovie(testMovieDetail),
       expect: () => [
-        const WatchlistStatusMovieState(
+        const MovieWatchlistStatusState(
             isAddedWatchlist: true, message: 'Removed'),
       ],
     );
 
-    blocTest<WatchlistStatusMovieCubit, WatchlistStatusMovieState>(
+    blocTest<MovieWatchlistStatusCubit, MovieWatchlistStatusState>(
       'should update watchlist message when remove watchlist failed',
       build: () {
         when(() => mockRemoveWatchlist.execute(testMovieDetail))
-            .thenAnswer((_) async => const Left(DatabaseFailure('Failed')));
+            .thenAnswer((_) async => Left(DatabaseFailure('Failed')));
         when(() => mockGetWatchListStatus.execute(testMovieDetail.id))
             .thenAnswer((_) async => false);
-        return watchlistStatusMovieCubit;
+        return movieWatchlistStatusCubit;
       },
       act: (bloc) => bloc.removeFromWatchlistMovie(testMovieDetail),
       expect: () => [
-        const WatchlistStatusMovieState(
-            isAddedWatchlist: false, message: 'Failed'),
+        MovieWatchlistStatusState(isAddedWatchlist: false, message: 'Failed'),
       ],
     );
   });
