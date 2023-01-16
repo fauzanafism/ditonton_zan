@@ -1,10 +1,14 @@
 part of 'tv_series_watchlist_status_cubit.dart';
 
-abstract class TvSeriesWatchlistStatusState extends Equatable {
-  const TvSeriesWatchlistStatusState();
+class TvSeriesWatchlistStatus extends Equatable {
+  final bool isAddedWatchlist;
+  final String message;
+
+  const TvSeriesWatchlistStatus({
+    required this.isAddedWatchlist,
+    required this.message,
+  });
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isAddedWatchlist];
 }
-
-class TvSeriesWatchlistStatusInitial extends TvSeriesWatchlistStatusState {}
