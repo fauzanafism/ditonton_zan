@@ -6,3 +6,13 @@ abstract class TvSeriesDetailEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class FetchTvSeriesDetail extends TvSeriesDetailEvent {
+  final int id;
+
+  FetchTvSeriesDetail({required this.id});
+
+ @override
+  List<Object> get props => [id];
+
+}
