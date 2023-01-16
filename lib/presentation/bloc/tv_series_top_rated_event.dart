@@ -4,5 +4,8 @@ abstract class TvSeriesTopRatedEvent extends Equatable {
   const TvSeriesTopRatedEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
+
+class FetchTopRatedTvSeries extends TvSeriesTopRatedEvent {}
+
