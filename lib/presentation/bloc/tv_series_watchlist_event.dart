@@ -4,5 +4,7 @@ abstract class TvSeriesWatchlistEvent extends Equatable {
   const TvSeriesWatchlistEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
+
+class FetchWatchlistTvSeries extends TvSeriesWatchlistEvent {}
