@@ -22,7 +22,7 @@ class Shared {
     if (isTestMode) {
       sslCertificate = utf8.encode(_certificatedString);
     } else {
-      sslCertificate = (await rootBundle.load('certificates/_.themoviedb.org.crt'))
+      sslCertificate = (await rootBundle.load('certificate/_.themoviedb.org.crt'))
           .buffer
           .asUint8List();
     }
