@@ -7,14 +7,14 @@ import 'package:ditonton/presentation/bloc/tv_series_popular_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGetPopularTVShows extends Mock implements GetPopularTvSeries {}
+class MockGetPopularTVSeries extends Mock implements GetPopularTvSeries {}
 
 void main() {
-  late MockGetPopularTVShows mockGetPopularTVShows;
+  late MockGetPopularTVSeries mockGetPopularTVShows;
   late TvSeriesPopularBloc popularTVBloc;
 
   setUp(() {
-    mockGetPopularTVShows = MockGetPopularTVShows();
+    mockGetPopularTVShows = MockGetPopularTVSeries();
     popularTVBloc = TvSeriesPopularBloc(getPopularTvSeries: mockGetPopularTVShows);
   });
 

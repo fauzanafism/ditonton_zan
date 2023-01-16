@@ -9,15 +9,15 @@ import 'package:ditonton/presentation/bloc/tv_series_recommendation_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGetTVShowsRecommendation extends Mock
+class MockGetTVSeriesRecommendation extends Mock
     implements GetTvSeriesRecommendation {}
 
 void main() {
-  late MockGetTVShowsRecommendation mockGetTVShowsRecommendation;
+  late MockGetTVSeriesRecommendation mockGetTVShowsRecommendation;
   late TvSeriesRecommendationBloc recommendationTVBloc;
 
   setUp(() {
-    mockGetTVShowsRecommendation = MockGetTVShowsRecommendation();
+    mockGetTVShowsRecommendation = MockGetTVSeriesRecommendation();
     recommendationTVBloc = TvSeriesRecommendationBloc(
         getTvSeriesRecommendation: mockGetTVShowsRecommendation);
   });

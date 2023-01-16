@@ -8,14 +8,14 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../dummy_data/dummy_objects.dart';
 
-class MockGetTVShowDetail extends Mock implements GetTvSeriesDetail {}
+class MockGetTVSeriesDetail extends Mock implements GetTvSeriesDetail {}
 
 void main() {
-  late MockGetTVShowDetail mockGetTVShowDetail;
+  late MockGetTVSeriesDetail mockGetTVShowDetail;
   late TvSeriesDetailBloc tvSeriesDetailBloc;
 
   setUp(() {
-    mockGetTVShowDetail = MockGetTVShowDetail();
+    mockGetTVShowDetail = MockGetTVSeriesDetail();
     tvSeriesDetailBloc =
         TvSeriesDetailBloc(getTvSeriesDetail: mockGetTVShowDetail);
   });
