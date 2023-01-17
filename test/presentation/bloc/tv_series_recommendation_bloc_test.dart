@@ -51,7 +51,7 @@ void main() {
             .thenAnswer((_) async => Right(tTVShowsList));
         return recommendationTVBloc;
       },
-      act: (bloc) => bloc.add(const FetchRecommendationTvShow(id: tId)),
+      act: (bloc) => bloc.add(const FetchRecommendationTvSeries(id: tId)),
       expect: () => [
         TvSeriesRecommendationLoadingState(),
         TvSeriesRecommendationHasDataState(result: tTVShowsList)
@@ -66,7 +66,7 @@ void main() {
             .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
         return recommendationTVBloc;
       },
-      act: (bloc) => bloc.add(const FetchRecommendationTvShow(id: tId)),
+      act: (bloc) => bloc.add(const FetchRecommendationTvSeries(id: tId)),
       expect: () => [
         TvSeriesRecommendationLoadingState(),
         const TvSeriesRecommendationErrorState(message: 'Server Failure'),

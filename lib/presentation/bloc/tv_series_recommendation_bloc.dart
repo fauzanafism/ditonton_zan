@@ -12,13 +12,14 @@ class TvSeriesRecommendationBloc
 
   TvSeriesRecommendationBloc({required this.getTvSeriesRecommendation})
       : super(TvSeriesRecommendationEmptyState()) {
-    on<FetchRecommendationTvShow>((event, emit) async {
+    on<FetchRecommendationTvSeries>((event, emit) async {
       emit(TvSeriesRecommendationLoadingState());
 
       final result = await getTvSeriesRecommendation.execute(event.id);
 
       result.fold(
-        (failure) => emit(TvSeriesRecommendationErrorState(message: failure.message)),
+        (failure) =>
+            emit(TvSeriesRecommendationErrorState(message: failure.message)),
         (data) => emit(TvSeriesRecommendationHasDataState(result: data)),
       );
     });

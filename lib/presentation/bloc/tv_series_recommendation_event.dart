@@ -1,6 +1,5 @@
 part of 'tv_series_recommendation_bloc.dart';
 
-
 abstract class RecommendationTvEvent extends Equatable {
   const RecommendationTvEvent();
 
@@ -8,10 +7,10 @@ abstract class RecommendationTvEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class FetchRecommendationTvShow extends RecommendationTvEvent {
+class FetchRecommendationTvSeries extends RecommendationTvEvent {
   final int id;
 
-  const FetchRecommendationTvShow({required this.id});
+  const FetchRecommendationTvSeries({required this.id});
 
   @override
   List<Object?> get props => [id];
