@@ -1,6 +1,7 @@
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/common/utils.dart';
+import 'package:ditonton/presentation/bloc/movie_watchlist_bloc.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_tv_series_page.dart';
 import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
@@ -8,6 +9,7 @@ import 'package:ditonton/presentation/provider/watchlist_tv_series_notifier.dart
 import 'package:ditonton/presentation/widgets/movie_list.dart';
 import 'package:ditonton/presentation/widgets/tv_series_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class WatchlistPage extends StatefulWidget {
@@ -36,8 +38,7 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
   }
 
   void didPopNext() {
-    Provider.of<WatchlistMovieNotifier>(context, listen: false)
-        .fetchWatchlistMovies();
+    context.read<MovieWatchlistBloc>().add(FetchWatchlistMovie());
     Provider.of<WatchlistTvSeriesNotifier>(context, listen: false)
         .fetchWatchlistTvSeries();
   }
@@ -58,19 +59,28 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
                   onTap: () => Navigator.pushNamed(
                       context, WatchlistMoviesPage.ROUTE_NAME),
                 ),
-                Consumer<WatchlistMovieNotifier>(
-                    builder: (context, data, child) {
-                  final state = data.watchlistState;
-                  if (state == RequestState.Loading) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (state == RequestState.Loaded) {
-                    return MovieList(data.watchlistMovies);
-                  } else {
-                    return Text('Failed');
-                  }
-                }),
+                BlocBuilder<MovieWatchlistBloc, MovieWatchlistState>(
+                  builder: (context, state) {
+                    if (state is MovieWatchlistLoadingState) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is MovieWatchlistHasDataState) {
+                      return MovieList(state.result);
+                    } else if (state is MovieWatchlistErrorState) {
+                      return Center(
+                        key: Key('error_message'),
+                        child: Text(state.message),
+                      );
+                    } else if (state is MovieWatchlistEmptyState) {
+                      return Center(
+                        child: Text('No data'),
+                      );
+                    } else {
+                      return Text('Failed');
+                    }
+                  },
+                ),
                 _buildSubHeading(
                   title: 'TV Series',
                   onTap: () => Navigator.pushNamed(
