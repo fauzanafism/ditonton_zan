@@ -9,7 +9,6 @@ import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:provider/provider.dart';
 
 class MovieDetailPage extends StatefulWidget {
   static const ROUTE_NAME = '/movie_detail';
@@ -111,22 +110,19 @@ class DetailContent extends StatelessWidget {
                                 return ElevatedButton(
                                   onPressed: () async {
                                     if (!isAddedWatchlist) {
-                                      await Provider.of<MovieDetailNotifier>(
-                                              context,
-                                              listen: false)
-                                          .addWatchlist(movie);
+                                      await context
+                                          .read<MovieWatchlistStatusCubit>()
+                                          .addWatchlistMovie(movie);
                                     } else {
-                                      await Provider.of<MovieDetailNotifier>(
-                                              context,
-                                              listen: false)
-                                          .removeFromWatchlist(movie);
+                                      await context
+                                          .read<MovieWatchlistStatusCubit>()
+                                          .removeFromWatchlistMovie(movie);
                                     }
 
-                                    final message =
-                                        Provider.of<MovieDetailNotifier>(
-                                                context,
-                                                listen: false)
-                                            .watchlistMessage;
+                                    final message = context
+                                        .read<MovieWatchlistStatusCubit>()
+                                        .state
+                                        .message;
 
                                     if (message ==
                                             MovieDetailNotifier
