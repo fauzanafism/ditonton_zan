@@ -297,6 +297,7 @@ class DetailContent extends StatelessWidget {
     return result.substring(0, result.length - 2);
   }
 
+  // ignore: unused_element
   String _showDuration(int runtime) {
     final int hours = runtime ~/ 60;
     final int minutes = runtime % 60;
