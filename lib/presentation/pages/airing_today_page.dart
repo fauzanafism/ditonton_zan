@@ -1,8 +1,7 @@
-import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/presentation/provider/airing_today_notifier.dart';
+import 'package:ditonton/presentation/bloc/airing_today_bloc.dart';
 import 'package:ditonton/presentation/widgets/tv_series_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AiringTodayPage extends StatefulWidget {
   static const ROUTE_NAME = '/airing-today';
@@ -15,9 +14,8 @@ class _AiringTodayPageState extends State<AiringTodayPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<AiringTodayNotifier>(context, listen: false)
-            .fetchAiringToday());
+    Future.microtask(
+        () => context.read<AiringTodayBloc>().add(FetchAiringToday()));
   }
 
   @override
@@ -28,25 +26,27 @@ class _AiringTodayPageState extends State<AiringTodayPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<AiringTodayNotifier>(
-          builder: (context, data, child) {
-            if (data.state == RequestState.Loading) {
+        child: BlocBuilder<AiringTodayBloc, AiringTodayState>(
+          builder: (context, state) {
+            if (state is AiringTodayLoadingState) {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (data.state == RequestState.Loaded) {
+            } else if (state is AiringTodayHasDataState) {
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  final tvSeries = data.tvSeries[index];
+                  final tvSeries = state.result[index];
                   return TvSeriesCard(tvSeries);
                 },
-                itemCount: data.tvSeries.length,
+                itemCount: state.result.length,
               );
-            } else {
+            } else if (state is AiringTodayErrorState) {
               return Center(
                 key: Key('error_message'),
-                child: Text(data.message),
+                child: Text(state.message),
               );
+            } else {
+              return Text('Failed');
             }
           },
         ),
