@@ -2,6 +2,7 @@ import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/common/ssl_pinning.dart';
 import 'package:ditonton/common/utils.dart';
 import 'package:ditonton/firebase_options.dart';
+import 'package:ditonton/presentation/bloc/airing_today_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_detail_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_popular_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_recommendation_bloc.dart';
@@ -9,7 +10,14 @@ import 'package:ditonton/presentation/bloc/movie_search_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_top_rated_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_watchlist_bloc.dart';
 import 'package:ditonton/presentation/bloc/now_playing_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_detail_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_popular_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_recommendation_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_search_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_top_rated_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_watchlist_bloc.dart';
 import 'package:ditonton/presentation/cubit/movie_watchlist_status_cubit.dart';
+import 'package:ditonton/presentation/cubit/tv_series_watchlist_status_cubit.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/airing_today_page.dart';
 import 'package:ditonton/presentation/pages/movie_detail_page.dart';
@@ -69,6 +77,30 @@ class MyApp extends StatelessWidget {
           create: (_) => di.locator<MovieWatchlistStatusCubit>(),
         ),
         // tv series
+        BlocProvider(
+          create: (_) => di.locator<AiringTodayBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TvSeriesPopularBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TvSeriesTopRatedBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TvSeriesRecommendationBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TvSeriesSearchBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => di.locator<TvSeriesDetailBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TvSeriesWatchlistBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TvSeriesWatchlistStatusCubit>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

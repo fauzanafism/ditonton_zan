@@ -27,6 +27,7 @@ import 'package:ditonton/domain/usecases/save_watchlist_movie.dart';
 import 'package:ditonton/domain/usecases/save_watchlist_tv_series.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/domain/usecases/search_tv_series.dart';
+import 'package:ditonton/presentation/bloc/airing_today_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_detail_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_popular_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_recommendation_bloc.dart';
@@ -34,14 +35,14 @@ import 'package:ditonton/presentation/bloc/movie_search_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_top_rated_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_watchlist_bloc.dart';
 import 'package:ditonton/presentation/bloc/now_playing_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_detail_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_popular_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_recommendation_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_search_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_top_rated_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv_series_watchlist_bloc.dart';
 import 'package:ditonton/presentation/cubit/movie_watchlist_status_cubit.dart';
-import 'package:ditonton/presentation/provider/airing_today_notifier.dart';
-import 'package:ditonton/presentation/provider/popular_tv_series_notifier.dart';
-import 'package:ditonton/presentation/provider/top_rated_tv_series_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_series_detail_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_series_list_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_series_search_notifier.dart';
-import 'package:ditonton/presentation/provider/watchlist_tv_series_notifier.dart';
+import 'package:ditonton/presentation/cubit/tv_series_watchlist_status_cubit.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 
@@ -79,46 +80,25 @@ void init() {
   );
   // tv series
   locator.registerFactory(
-    () => TvSeriesListNotifier(
-      getAiringTodayTvSeries: locator(),
-      getPopularTvSeries: locator(),
-      getTopRatedTvSeries: locator(),
+      () => AiringTodayBloc(getAiringTodayTvSeries: locator()));
+  locator.registerFactory(
+      () => TvSeriesPopularBloc(getPopularTvSeries: locator()));
+  locator.registerFactory(
+      () => TvSeriesTopRatedBloc(getTopRatedTVSeries: locator()));
+  locator
+      .registerFactory(() => TvSeriesDetailBloc(getTvSeriesDetail: locator()));
+  locator.registerFactory(() => TvSeriesSearchBloc(searchTvSeries: locator()));
+  locator.registerFactory(
+      () => TvSeriesWatchlistBloc(getWatchlistTVShows: locator()));
+  locator.registerFactory(
+    () => TvSeriesWatchlistStatusCubit(
+      getWatchlistTvSeriesStatus: locator(),
+      removeWatchlistTvSeries: locator(),
+      saveWatchlistTvSeries: locator(),
     ),
   );
   locator.registerFactory(
-    () => TvSeriesDetailNotifier(
-      getTvSeriesDetail: locator(),
-      getTvSeriesRecommendations: locator(),
-      getWatchListStatus: locator(),
-      saveWatchlist: locator(),
-      removeWatchlist: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => TvSeriesSearchNotifier(
-      searchTvSeries: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => AiringTodayNotifier(
-      locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => PopularTvSeriesNotifier(
-      locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => TopRatedTvSeriesNotifier(
-      getTopRatedTvSeries: locator(),
-    ),
-  );
-  locator.registerFactory(
-    () => WatchlistTvSeriesNotifier(
-      getWatchlistTvSeries: locator(),
-    ),
-  );
+      () => TvSeriesRecommendationBloc(getTvSeriesRecommendation: locator()));
 
   // use case movie
   locator.registerLazySingleton(() => GetNowPlayingMovies(locator()));
