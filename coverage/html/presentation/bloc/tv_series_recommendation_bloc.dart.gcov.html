@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">8</td>
-            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntry">9</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-01-17 06:55:26</td>
+            <td class="headerValue">2023-01-17 22:43:52</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -74,18 +74,19 @@
 <a name="12"><span class="lineNum">      12 </span>            : </a>
 <a name="13"><span class="lineNum">      13 </span><span class="lineCov">          1 :   TvSeriesRecommendationBloc({required this.getTvSeriesRecommendation})</span></a>
 <a name="14"><span class="lineNum">      14 </span><span class="lineCov">          2 :       : super(TvSeriesRecommendationEmptyState()) {</span></a>
-<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          2 :     on&lt;FetchRecommendationTvShow&gt;((event, emit) async {</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          2 :     on&lt;FetchRecommendationTvSeries&gt;((event, emit) async {</span></a>
 <a name="16"><span class="lineNum">      16 </span><span class="lineCov">          2 :       emit(TvSeriesRecommendationLoadingState());</span></a>
 <a name="17"><span class="lineNum">      17 </span>            : </a>
 <a name="18"><span class="lineNum">      18 </span><span class="lineCov">          3 :       final result = await getTvSeriesRecommendation.execute(event.id);</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : </a>
 <a name="20"><span class="lineNum">      20 </span><span class="lineCov">          1 :       result.fold(</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          4 :         (failure) =&gt; emit(TvSeriesRecommendationErrorState(message: failure.message)),</span></a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">          3 :         (data) =&gt; emit(TvSeriesRecommendationHasDataState(result: data)),</span></a>
-<a name="23"><span class="lineNum">      23 </span>            :       );</a>
-<a name="24"><span class="lineNum">      24 </span>            :     });</a>
-<a name="25"><span class="lineNum">      25 </span>            :   }</a>
-<a name="26"><span class="lineNum">      26 </span>            : }</a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          1 :         (failure) =&gt;</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">          3 :             emit(TvSeriesRecommendationErrorState(message: failure.message)),</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">          3 :         (data) =&gt; emit(TvSeriesRecommendationHasDataState(result: data)),</span></a>
+<a name="24"><span class="lineNum">      24 </span>            :       );</a>
+<a name="25"><span class="lineNum">      25 </span>            :     });</a>
+<a name="26"><span class="lineNum">      26 </span>            :   }</a>
+<a name="27"><span class="lineNum">      27 </span>            : }</a>
 </pre>
       </td>
     </tr>
