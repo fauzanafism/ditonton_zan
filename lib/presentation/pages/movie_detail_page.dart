@@ -5,7 +5,6 @@ import 'package:ditonton/domain/entities/movie_detail.dart';
 import 'package:ditonton/presentation/bloc/movie_detail_bloc.dart';
 import 'package:ditonton/presentation/bloc/movie_recommendation_bloc.dart';
 import 'package:ditonton/presentation/cubit/movie_watchlist_status_cubit.dart';
-import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -48,7 +47,10 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               child: DetailContent(movie),
             );
           } else if (state is MovieDetailErrorState) {
-            return Text(state.message);
+            return Text(
+              state.message,
+              key: Key('error_message'),
+            );
           } else {
             return Text('Failed');
           }
@@ -125,11 +127,11 @@ class DetailContent extends StatelessWidget {
                                         .message;
 
                                     if (message ==
-                                            MovieDetailNotifier
-                                                .watchlistAddSuccessMessage ||
+                                            MovieWatchlistStatusCubit
+                                                .successMessage ||
                                         message ==
-                                            MovieDetailNotifier
-                                                .watchlistRemoveSuccessMessage) {
+                                            MovieWatchlistStatusCubit
+                                                .removeMessage) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                               SnackBar(content: Text(message)));
